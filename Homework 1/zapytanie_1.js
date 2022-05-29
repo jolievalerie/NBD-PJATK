@@ -1,1 +1,1 @@
-db.people.find().pretty().limit(1);
+printjson(db.people.find().pretty().limit(1).toArray());
