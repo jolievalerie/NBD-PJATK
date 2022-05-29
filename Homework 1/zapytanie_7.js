@@ -4,4 +4,4 @@ db.people.find({}).forEach(item => {
         {$set: { height: parseFloat(item.height)}})});
 
 
-db.people.remove({height: {$gt: 190}});
+printjson(db.people.remove({height: {$gt: 190}}));
