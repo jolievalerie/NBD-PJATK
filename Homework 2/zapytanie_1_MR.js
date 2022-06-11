@@ -7,7 +7,7 @@ db.people.mapReduce(
         },
         {out:"genderAvgHeight"}
      );
-db.genderAvgHeight.find();
+printjson(db.genderAvgHeight.find().pretty().toArray());
 
 
 db.people.mapReduce(
@@ -19,4 +19,4 @@ db.people.mapReduce(
         },
         {out:"genderAvgWeight"}
      );
-db.genderAvgWeight.find();
+printjson(db.genderAvgWeight.find().pretty().toArray());
