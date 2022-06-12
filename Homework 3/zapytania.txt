@@ -40,8 +40,9 @@ RETURN DISTINCT movies.title
 
 //
 
-
-
+MATCH (actor:Person) -[:ACTED_IN]-> (matrix:Movie {title: "The Matrix"})
+MATCH (actor) -[:ACTED_IN]-> (movies:Movie)
+RETURN DISTINCT movies, actor
 
 6) Listę aktorów (aktor = osoba, która grała przynajmniej w jednym filmie) wraz z ilością filmów, w których grali 
 
@@ -53,8 +54,32 @@ RETURN count(movies), actors
 MATCH (actors:Person)-[:ACTED_IN]->(movies)
 RETURN count(movies), actors.name
 
-7) Listę osób, które napisały scenariusz filmu, które wyreżyserowały wraz z tytułami takich filmów (koniunkcja – ten sam autor scenariusza i reżyser) 
+7) Listę osób, które napisały scenariusz filmu, które wyreżyserowały wraz z tytułami takich filmów (koniunkcja – ten sam autor scenariusza i reżyser)
+
+MATCH (scenarist:Person) -[:WROTE]-> (movie:Movie)
+MATCH (director:Person) -[:DIRECTED]-> (movie)
+WHERE scenarist.name = director.name
+RETURN scenarist, director, movie
+
+//
+
+MATCH (scenarist:Person) -[:WROTE]-> (movie:Movie)
+MATCH (director:Person) -[:DIRECTED]-> (movie)
+WHERE scenarist.name = director.name
+RETURN scenarist.name
+
 8) Listę filmów, w których grał zarówno Hugo Weaving jak i Keanu Reeves 
+
+MATCH (hugo:Person {name: "Hugo Weaving"}) -[:ACTED_IN]-> (movie:Movie)
+MATCH (keanu:Person {name: "Keanu Reeves"}) -[:ACTED_IN]-> (movie)
+RETURN movie, keanu, hugo
+
+//
+
+MATCH (hugo:Person {name: "Hugo Weaving"}) -[:ACTED_IN]-> (movie:Movie)
+MATCH (keanu:Person {name: "Keanu Reeves"}) -[:ACTED_IN]-> (movie)
+RETURN movie.title
+
 9) (za 0.2pkt) Zestaw zapytań powodujących uzupełnienie bazy danych o film Captain America: The First Avenger wraz z uzupełnieniem informacji o reżyserze, 
    scenarzystach i odtwórcach głównych ról (w oparciu o skrócone informacje z IMDB - http://www.imdb.com/title/tt0458339/) + zapytanie pokazujące dodany do 
    bazy film wraz odtwórcami głównych ról, scenarzystą i reżyserem. Plik SVG ma pokazywać wynik ostatniego zapytania.  
