@@ -33,7 +33,26 @@ RETURN coactors
 
 
 5) Wszystkie filmy osób, które grały w Matrix
+
+MATCH (actor:Person) -[:ACTED_IN]-> (matrix:Movie {title: "The Matrix"})
+MATCH (actor) -[:ACTED_IN]-> (movies:Movie)
+RETURN DISTINCT movies.title
+
+//
+
+
+
+
 6) Listę aktorów (aktor = osoba, która grała przynajmniej w jednym filmie) wraz z ilością filmów, w których grali 
+
+MATCH (actors:Person)-[:ACTED_IN]->(movies)
+RETURN count(movies), actors
+
+//
+
+MATCH (actors:Person)-[:ACTED_IN]->(movies)
+RETURN count(movies), actors.name
+
 7) Listę osób, które napisały scenariusz filmu, które wyreżyserowały wraz z tytułami takich filmów (koniunkcja – ten sam autor scenariusza i reżyser) 
 8) Listę filmów, w których grał zarówno Hugo Weaving jak i Keanu Reeves 
 9) (za 0.2pkt) Zestaw zapytań powodujących uzupełnienie bazy danych o film Captain America: The First Avenger wraz z uzupełnieniem informacji o reżyserze, 
