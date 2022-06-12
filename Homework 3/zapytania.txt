@@ -8,7 +8,30 @@ MATCH (n:Movie) RETURN n
 MATCH (hugo:Person {name: "Hugo Weaving"})-[:ACTED_IN]->(hugoWeavingMovies) RETURN hugo, hugoWeavingMovies
 
 3) Reżyserzy filmów, w których grał Hugo Weaving 
+
+MATCH (hugo:Person)-[:ACTED_IN]->(movies)<-[:DIRECTED]-(directors) 
+WHERE hugo.name = "Hugo Weaving"
+RETURN directors, hugo, movies
+
+//
+
+MATCH (hugo:Person)-[:ACTED_IN]->(movies)<-[:DIRECTED]-(directors) 
+WHERE hugo.name = "Hugo Weaving"
+RETURN directors
+
 4) Wszystkie osoby, z którymi Hugo Weaving grał w tych samych filmach 
+
+MATCH (hugo:Person)-[:ACTED_IN]->(movies)<-[:ACTED_IN]-(coactors:Person)
+WHERE hugo.name = "Hugo Weaving"
+RETURN hugo, coactors, movies
+
+//
+
+MATCH (hugo:Person)-[:ACTED_IN]->(movies)<-[:ACTED_IN]-(coactors:Person)
+WHERE hugo.name = "Hugo Weaving"
+RETURN coactors
+
+
 5) Wszystkie filmy osób, które grały w Matrix
 6) Listę aktorów (aktor = osoba, która grała przynajmniej w jednym filmie) wraz z ilością filmów, w których grali 
 7) Listę osób, które napisały scenariusz filmu, które wyreżyserowały wraz z tytułami takich filmów (koniunkcja – ten sam autor scenariusza i reżyser) 
