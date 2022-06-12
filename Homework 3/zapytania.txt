@@ -85,3 +85,26 @@ RETURN movie.title
    bazy film wraz odtwórcami głównych ról, scenarzystą i reżyserem. Plik SVG ma pokazywać wynik ostatniego zapytania.  
 
 
+CREATE (TheCapitanAmerica:Movie {title:'Captain America: The First Avenger', released:2011, tagline:'When patriots become heroes'})
+
+CREATE (JoeJ:Person {name:'Joe Johnston', born:1950})
+CREATE (ChristopherM:Person {name:'Christopher Markus', born:1970})
+CREATE (StephenMcF:Person {name:'Stephen McFeely', born:1970})
+CREATE (JoeS:Person {name:'Joe Simon', born:1913})
+CREATE (ChrisE:Person {name:'Chris Evans', born:1981})
+CREATE (SamuelLJ:Person {name:'Samuel L. Jackson', born:1948})
+CREATE
+(JoeJ)-[:DIRECTED]->(TheCapitanAmerica),
+(ChristopherM)-[:PRODUCED]->(TheCapitanAmerica),
+(StephenMcF)-[:PRODUCED]->(TheCapitanAmerica),
+(JoeS)-[:PRODUCED]->(TheCapitanAmerica),
+(ChrisE)-[:ACTED_IN {roles:['Capitan America']}]->(TheCapitanAmerica),
+(Hugo)-[:ACTED_IN {roles:['Johann Schmidt']}]->(TheCapitanAmerica),
+(SamuelLJ)-[:ACTED_IN {roles:['Nick Fury']}]->(TheCapitanAmerica)
+
+
+
+MATCH (actors: Person)-[:ACTED_IN]-> (theCapitanAmerica {title: "Captain America: The First Avenger"})<-[:DIRECTED]-(directors) 
+MATCH (producers:Person)-[:PRODUCED]->(theCapitanAmerica)
+
+RETURN directors, actors, producers, theCapitanAmerica
