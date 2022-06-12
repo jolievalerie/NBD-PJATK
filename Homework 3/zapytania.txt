@@ -1,4 +1,3 @@
-d1tC9Pd_IVIivb9SNuwDy9J2L17-NV_RNrcOyXMdiRo
 1)Wszystkie filmy
 
 MATCH (n:Movie) RETURN n
