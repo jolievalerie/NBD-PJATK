@@ -1,0 +1,19 @@
+Starting adding a new document
+Adding succeed
+Getting a recently added document
+Geting succeed
+Printing a recently gotten document
+{u'one': 1}
+Printing succeed
+Editing a recently added document
+Modification succeed
+Getting a recently modified document
+Getting succeed
+Printing a recently modified document
+{u'one': 2}
+Printing succeed
+Deleting a recently modified document
+Delete succeed
+Trying to delete a recently deleted document
+None
+Document not found
