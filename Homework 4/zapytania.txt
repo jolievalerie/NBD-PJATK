@@ -1,0 +1,63 @@
+Zaimportuj dane uruchamiając skrypt task2.cypher. Napisz następujące zapytania:  
+1.	Znajdź trasy którymi można dostać się z Darjeeling na Sandakphu, mające najmniejszą ilość etapów 
+
+MATCH (entrypoint:town {name: "Darjeeling"}), (finish:peak {name: "Sandakphu"}) 
+MATCH way = allShortestPaths((entrypoint)-[*]->(finish)) 
+RETURN way
+
+2.	Znajdź mające najmniej etapów trasy którymi można dostać się z Darjeeling na Sandakphu i które mogą być wykorzystywane zimą 
+
+MATCH (entrypoint:town {name: "Darjeeling"}), (finish:peak {name: "Sandakphu"}), way = allShortestPaths((entrypoint)-[*]->(finish))
+WITH way, relationships(way) as relation
+WHERE ALL (i in relation WHERE i.winter = "true")
+RETURN way, relation
+
+3.	Uszereguj trasy którymi można dostać się z Darjeeling na Sandakphu według dystansu 
+
+MATCH way = ((entrypoint:town{name: "Darjeeling"})-[*1..8]-(finish:peak { name:"Sandakphu" }))
+RETURN way, REDUCE(addDistance=0, path IN relationships(way)|addDistance + path.distance) AS sumDistance 
+ORDER BY sumDistance ASC
+
+
+4.	Znajdź wszystkie miejsca do których można dotrzeć przy pomocy roweru (twowheeler) z Darjeeling latem
+
+MATCH (entrypoint:town{name: "Darjeeling"})-[way:twowheeler]->(locations) 
+WHERE way.summer="True" 
+RETURN locations
+
+Zaimportuj dane uruchamiając skrypt task3.cypher. Napisz następujące zapytania:
+
+5.	Uszereguj porty lotnicze według ilości rozpoczynających się w nich lotów
+
+MATCH (airport:Airport)<-[:ORIGIN]-(flight:Flight)
+WITH airport, count(flight) as flightsNum
+RETURN airport, flightsNum
+ORDER BY flightsNum DESC
+
+6.	Znajdź wszystkie porty lotnicze, do których da się dolecieć (bezpośrednio lub z przesiadkami) z Los Angeles (LAX) wydając mniej niż 3000 
+
+MATCH p = (origin:Airport {name: 'LAX'})-[:ORIGIN|DESTINATION*..5]-(destination:Airport)
+WHERE
+  ALL(i IN RANGE(0, LENGTH(p)-1) WHERE
+    TYPE(RELATIONSHIPS(p)[i]) = ['ORIGIN', 'DESTINATION'][i] AND
+    (i%4 <> 1 OR (i + 2) > LENGTH(p) OR
+      (apoc.date.parse(NODES(p)[i].date,'m','MM/dd/yyyy hh:mm:ss') + NODES(p)[i].duration + 30) < apoc.date.parse(NODES(p)[i+2].date,'m','MM/dd/yyyy hh:mm:ss'))
+  ) AND
+  REDUCE(s = 0, n IN [k IN RANGE(1, LENGTH(p), 2) | NODES(p)[k]] |
+    s + [(n)<-[:ASSIGN]-(ticket) | ticket.price][0]
+  ) < 3000
+RETURN p
+
+
+7.	Uszereguj połączenia, którymi można dotrzeć z Los Angeles (LAX) do Dayton (DAY) według ceny biletów 
+
+MATCH airport = (airportStp:Airport{name: "DAY"})<-[cheapestFlight:CHEAPEST_FLIGHT*1..10]-(airportStp:Airport {name: "LAX"}), (airportStp:Airport)<-[:DESTINATION]-(), ()-[:ORIGIN]->(airportStp:Airport) 
+RETURN airport, REDUCE(totalPrice=0, rel IN relationships(airport)|totalPrice + rel.price)  as cost 
+ORDER BY cost DESC
+
+8.	Znajdź najtańsze połączenie z Los Angeles (LAX) do Dayton (DAY) 
+
+MATCH airport = (airportStp:Airport{name: "DAY"})<-[cheapestFlight:CHEAPEST_FLIGHT*1..10]-(airportStp:Airport {name: "LAX"}), (airportStp:Airport)<-[:DESTINATION]-(), ()-[:ORIGIN]->(airportStp:Airport) 
+RETURN airport, REDUCE(totalPrice=0, rel IN relationships(airport)|totalPrice + rel.price)  as cost 
+ORDER BY cost ASC
+LIMIT 1

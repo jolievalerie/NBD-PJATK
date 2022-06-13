@@ -1,0 +1,32 @@
+\*   Trying 127.0.0.1:8098...
+* Connected to 127.0.0.1 (127.0.0.1) port 8098 (#0)
+> GET /buckets/s24564/keys/doc1 HTTP/1.1
+> Host: 127.0.0.1:8098
+> User-Agent: curl/7.78.0
+> Accept: */*
+> 
+* Mark bundle as not supporting multiuse
+< HTTP/1.1 200 OK
+HTTP/1.1 200 OK
+< X-Riak-Vclock: a85hYGBgzGDKBVI8ypz/fpZbxHRChBJZ8lgZ2F9K3+HLAgA=
+X-Riak-Vclock: a85hYGBgzGDKBVI8ypz/fpZbxHRChBJZ8lgZ2F9K3+HLAgA=
+< Vary: Accept-Encoding
+Vary: Accept-Encoding
+< Server: MochiWeb/1.1 WebMachine/1.10.9 (cafe not found)
+Server: MochiWeb/1.1 WebMachine/1.10.9 (cafe not found)
+< Link: </buckets/s24564>; rel="up"
+Link: </buckets/s24564>; rel="up"
+< Last-Modified: Mon, 13 Jun 2022 16:59:51 GMT
+Last-Modified: Mon, 13 Jun 2022 16:59:51 GMT
+< ETag: "1yy9pi2OL5icvId0RK5XA7"
+ETag: "1yy9pi2OL5icvId0RK5XA7"
+< Date: Mon, 13 Jun 2022 17:00:46 GMT
+Date: Mon, 13 Jun 2022 17:00:46 GMT
+< Content-Type: application/json
+Content-Type: application/json
+< Content-Length: 38
+Content-Length: 38
+
+< 
+* Connection #0 to host 127.0.0.1 left intact
+{"1a":11, "1b":12, "1c":"c", "1d":"d"}%   
